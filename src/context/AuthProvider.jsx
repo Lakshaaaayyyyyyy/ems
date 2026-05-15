@@ -1,11 +1,16 @@
 import React, { createContext, useState, useEffect } from 'react'
+import { setLocalStorage, getLocalStorage } from '../utils/localStorage'
 
 export const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
     const [employees, setEmployees] = useState(() => {
-        const saved = localStorage.getItem('employees')
-        return saved ? JSON.parse(saved) : []
+        // Seed localStorage with initial data if it doesn't exist yet
+        if (!localStorage.getItem('employees')) {
+            setLocalStorage()
+        }
+        const { employees } = getLocalStorage()
+        return employees || []
     })
 
     // Function to update employees data
